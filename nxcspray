@@ -1,0 +1,58 @@
+#!/bin/bash
+
+# Usage:
+#   nxcspray <protocols> <target(s)> -u <username> -p <password>
+#
+# Example:
+#   nxcspray smb,ldap,winrm hosts.txt -u bob -p 'Winter2025!'
+
+# ---- Argument Parsing ----
+
+if [ "$#" -lt 4 ]; then
+    echo "[-] Usage: $0 <protocols> <targets> -u <username> -p <password>"
+    exit 1
+fi
+
+PROTOS="$1"
+TARGETS_RAW="$2"
+shift 2
+
+USER=""
+PASS=""
+
+while getopts "u:p:" opt; do
+    case $opt in
+        u) USER="$OPTARG" ;;
+        p) PASS="$OPTARG" ;;
+        *) 
+           echo "[-] Invalid flag."
+           exit 1
+        ;;
+    esac
+done
+
+# Validate required flags
+if [ -z "$USER" ] || [ -z "$PASS" ]; then
+    echo "[-] Missing required flags: -u <username> -p <password>"
+    exit 1
+fi
+
+# ---- Process Protocol List ----
+IFS=',' read -ra PROTO_ARRAY <<< "$PROTOS"
+
+# ---- Process Targets ----
+if [ -f "$TARGETS_RAW" ]; then
+    TARGETS=$(cat "$TARGETS_RAW")
+else
+    TARGETS="$TARGETS_RAW"
+fi
+
+# ---- Spraying Loop ----
+for PROTO in "${PROTO_ARRAY[@]}"; do
+    echo "[+] Spraying protocol: $PROTO"
+
+    for TARGET in $TARGETS; do
+        echo "    -> Target: $TARGET"
+        nxc "$PROTO" "$TARGET" -u "$USER" -p "$PASS"
+    done
+done
