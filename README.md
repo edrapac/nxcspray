@@ -12,10 +12,20 @@ chmod +x /usr/local/bin/nxcspray
 
 # Usage
 ```
-nxcspray <protocols> <targets> -u <username> -p <password>
+└─$ nxcspray -h                 
+[-] Usage: nxcspray <protocols|all> <targets> -u <username> -p <password>
 ```
 
 Example Usage
 ```
-nxcspray smb,mssql,winrm,rdp targets.txt -u bob -p boblovescamping123!
+nxcspray smb,winrm targets.txt -u e.hills -p 'Il0vemyj0b2025!'
 ```
+<img width="1249" height="172" alt="image" src="https://github.com/user-attachments/assets/1d782a78-1e65-4483-8722-b602c1c1b774" />
+
+
+
+```
+nxcspray all 10.1.45.200 -u e.hills -p 'Il0vemyj0b2025!'
+```
+<img width="1315" height="365" alt="image" src="https://github.com/user-attachments/assets/65453924-98c5-44c1-975c-bfb40968ef88" />
+
