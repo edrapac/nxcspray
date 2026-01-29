@@ -22,8 +22,8 @@ PASS=""
 
 while getopts "u:p:" opt; do
     case $opt in
-        u) USER="$OPTARG" ;;
-        p) PASS="$OPTARG" ;;
+        u) USER="$OPTARG"; u_set=1 ;;
+        p) PASS="$OPTARG"; p_set=1 ;;
         *)
             echo "[-] Invalid flag"
             exit 1
@@ -31,7 +31,8 @@ while getopts "u:p:" opt; do
     esac
 done
 
-if [ -z "$USER" ] || [ -z "$PASS" ]; then
+# here we want to allow users to set either -u or -p to null as null checks, or guest user with no password is valid use of nxc
+if [ -z "$u_set" ] || [ -z "$p_set" ]; then
     echo "[-] Missing required flags: -u <username> -p <password>"
     exit 1
 fi
